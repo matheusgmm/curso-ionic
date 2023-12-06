@@ -43,6 +43,7 @@ export class PlaceDetailPage implements OnInit {
 
     this.actionSheetCtrl.create({
       header: 'Choose and Action',
+      mode: 'ios',
       buttons: [
         {
           text: 'Select Date',
