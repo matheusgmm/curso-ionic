@@ -4,10 +4,144 @@
       <ion-back-button defaultHref="/places/tabs/offers"></ion-back-button>
     </ion-buttons>
     <ion-title>New Offer</ion-title>
+    <ion-buttons buttons slot="primary">
+      <ion-button (click)="onCreateOffer()" [disabled]="!form.valid">
+        <ion-icon name="checkmark" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
+
 <ion-content [fullscreen]="true">
+  <form [formGroup]="form">
+    <ion-grid>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item>
+            <ion-input 
+                type="text"
+                autocorrect
+                label="Title" 
+                labelPlacement="floating" 
+                placeholder="Enter title"
+                formControlName="title"
+              ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+  
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item>
+            <ion-textarea
+              rows="3"
+              label="Short Description"
+              labelPlacement="floating" 
+              formControlName="description"
+            ></ion-textarea>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="!form.get('description')?.valid && form.get('description')?.touched || form.get('description')?.touched && !form.get('description')?.value">
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-label 
+            class="ion-text-center ion-margin-start" 
+            color="danger"
+          >
+            Description must be between 1 and 180 characters.
+          </ion-label>
+        </ion-col>
+      </ion-row>
+  
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item>
+            <ion-input 
+                type="number"
+                label="Price" 
+                labelPlacement="floating" 
+                placeholder="Enter price"
+                formControlName="price"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+  
+      <ion-row >
+  
+        <ion-col size-sm="3" offset-sm="3">
+          <ion-item button="true" id="first-datepicker" detail="false">
+            <ion-input 
+              [value]="form.controls['dateFrom'].value | date:'dd/MM/yyyy'"
+              label="From"
+              labelPlacement="floating" 
+            ></ion-input>
+            <ion-popover trigger="first-datepicker" class="popover-datetime" showBackdrop="false">
+  
+              <ng-template>
+                <ion-datetime
+                  min="2023-01-01"
+                  max="2024-12-31"
+                  presentation="date"
+                  formControlName="dateFrom"
+                  #dateFromPopover
+                ></ion-datetime>
+              </ng-template>
+  
+            </ion-popover>
+          </ion-item>
+        </ion-col>
+  
+        <ion-col size-sm="3" >
+          <ion-item button="true" id="second-datepicker" detail="false">
+            <ion-input 
+              [value]="form.controls['dateTo'].value | date:'dd/MM/yyyy'"
+              label="To"
+              labelPlacement="floating" 
+            ></ion-input>
+            <ion-popover trigger="second-datepicker" class="popover-datetime" showBackdrop="false">
+  
+              <ng-template>
+                <ion-datetime
+                  min="2023-01-02"
+                  max="2024-12-31"
+                  presentation="date"
+                  #dateTopopover
+                  formControlName="dateTo"
+                ></ion-datetime>
+  
+              </ng-template>
+            </ion-popover>
+          </ion-item>
+        </ion-col>
+  
+      </ion-row>
+
+    </ion-grid>
+  </form>
+</ion-content>
+  
+
+
+        <!-- <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item >
+            <ion-label position="floating">Available from</ion-label>
+            <ion-datetime min="2023-01-01" max="2024-12-31"></ion-datetime>
+          </ion-item>
+        </ion-col>
+  
+        <ion-col size-sm="3">
+          <ion-item>
+            <ion-label position="floating">Available to</ion-label>
+            <ion-datetime min="2023-12-02" max="2024-12-31"></ion-datetime>
+          </ion-item>
+        </ion-col>
+      </ion-row> -->
+ 
+<!-- <ion-content [fullscreen]="true">
   <ion-grid class="ion-no-padding" fixed>
     <ion-row class="ion-align-items-center ion-justify-content-center">
       <ion-col size="5" size-sm="4" side-md="2" offset-sm="2" offset-md="1">Row 1 Col 1</ion-col>
@@ -26,7 +160,7 @@
       <ion-col>Row 2 Col 2</ion-col>
     </ion-row>
   </ion-grid>
-</ion-content>
+</ion-content> -->
 
 
 
