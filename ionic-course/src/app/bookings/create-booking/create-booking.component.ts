@@ -10,6 +10,8 @@ import { Place } from 'src/app/places/place.model';
 export class CreateBookingComponent  implements OnInit {
 
   @Input() selectedPlace!: Place;
+  endDateCtrl: any;
+  startDateCtrl: any
 
   constructor(private modalCtrl: ModalController) { }
 
@@ -22,7 +24,5 @@ export class CreateBookingComponent  implements OnInit {
   onBookPlace() {
     this.modalCtrl.dismiss({message: 'This is a dummy message!'}, 'confirm');
   }
-
-
 
 }
