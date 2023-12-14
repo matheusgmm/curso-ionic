@@ -63,54 +63,55 @@
       </ion-row>
 
       <ion-row>
-        <ion-col size-sm="8" offset-sm="2">
-          <ion-item>
-            <ion-datetime-button datetime="date-from"></ion-datetime-button>
-            <ion-modal [keepContentsMounted]="true">
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item button="true" id="first-datepicker" detail="false">
+            <ion-input 
+              [(ngModel)]="startDateCtrl"
+              name="date-from"
+              label="From"
+              labelPlacement="floating"
+              readonly 
+            ></ion-input>
+            <ion-popover trigger="first-datepicker" class="popover-datetime" showBackdrop="false">
               <ng-template>
                 <ion-datetime
                   display-format="MMM DD YYYY"
                   picker-format="YY MMM DD"
-                  [min]=""
-                  [max]=""
-                  [ngModel]
+                  [(ngModel)]="startDateCtrl"
                   name="date-from"
-                  id="date-from"
-                  required
-                  #startDateCtrl="ngModel"
+                  (ionChange)="formatDate($event, 'startDateCtrl')"
                 >
-                  <span slot="title">Select a Reservation Date</span>
                 </ion-datetime>
               </ng-template>
-            </ion-modal>
-            
+            </ion-popover>
           </ion-item>
         </ion-col>
       </ion-row>
 
-      <ion-row>
-        <ion-col size-sm="8" offset-sm="2">
-          <ion-item>
-            <ion-datetime-button datetime="date-to"></ion-datetime-button>
-            <ion-modal [keepContentsMounted]="true">
+      <ion-row >
+        <ion-col size-sm="6" offset-sm="3">
+          <ion-item button="true" id="second-datepicker" detail="false">
+            <ion-input 
+              [(ngModel)]="endDateCtrl"
+              label="To"
+              labelPlacement="floating"
+              name="date-to"
+              readonly
+            ></ion-input>
+            <ion-popover trigger="second-datepicker" class="popover-datetime" showBackdrop="false">
+  
               <ng-template>
                 <ion-datetime
                   display-format="MMM DD YYYY"
                   picker-format="YY MMM DD"
-                  [min]="startDateCtrl?.value"
-                  [max]=""
-                  [ngModel]
+                  [(ngModel)]="endDateCtrl"
                   name="date-to"
-                  id="date-to"
-                  required
-                  #endDateCtrl="ngModel"
+                  [min]="startDateCtrl"
+                  (ionChange)="formatDate($event, 'endDateCtrl')"
                 >
-                  <span slot="title">Select a Reservation Date</span>
                 </ion-datetime>
               </ng-template>
-            </ion-modal>
-
-            
+            </ion-popover>
           </ion-item>
         </ion-col>
       </ion-row>
@@ -121,64 +122,6 @@
         </ion-col>
       </ion-row>
 
-      <!-- <ion-row >
-  
-        <ion-col size-sm="6" offset-sm="3">
-          <ion-item button="true" id="first-datepicker" detail="false">
-            <ion-input 
-              
-              label="From"
-              labelPlacement="floating" 
-            ></ion-input>
-            <ion-popover trigger="first-datepicker" class="popover-datetime" showBackdrop="false">
-  
-              <ng-template>
-                <ion-datetime
-                  display-format="MMM DD YYYY"
-                  picker-format="YY MMM DD"
-                  ngModel
-                  #startDateCtrl="ngModel"
-                  name="date-from"
-                >
-                </ion-datetime>
-              </ng-template>
-  
-            </ion-popover>
-          </ion-item>
-        </ion-col>
-
-      </ion-row>
-
-      <ion-row >
-  
-        <ion-col size-sm="3">
-          <ion-item button="true" id="first-datepicker" detail="false">
-            <ion-input 
-              
-              label="From"
-              labelPlacement="floating" 
-            ></ion-input>
-            <ion-popover trigger="first-datepicker" class="popover-datetime" showBackdrop="false">
-  
-              <ng-template>
-                <ion-datetime
-                  display-format="MMM DD YYYY"
-                  picker-format="YY MMM DD"
-                  ngModel
-                  #dateFromCtrl="ngModel"
-                  name="date-from"
-                  [min]="startDateCtrl.value"
-                >
-                </ion-datetime>
-              </ng-template>
-  
-            </ion-popover>
-          </ion-item>
-        </ion-col>
-
-      </ion-row> -->
-
     </ion-grid>
-    
   </form>
 </ion-content>
