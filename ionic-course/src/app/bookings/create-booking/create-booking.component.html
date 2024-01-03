@@ -10,7 +10,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding ion-text-center">
-  <form>
+  <form (ngSubmit)="onBookPlace()" #f="ngForm">
     <ion-grid>
 
       <ion-row>
@@ -62,15 +62,17 @@
         </ion-col>
       </ion-row>
 
+
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">
           <ion-item button="true" id="first-datepicker" detail="false">
-            <ion-input 
+            <ion-input
               [(ngModel)]="startDateCtrl"
               name="date-from"
               label="From"
               labelPlacement="floating"
-              readonly 
+              readonly
+              required
             ></ion-input>
             <ion-popover trigger="first-datepicker" class="popover-datetime" showBackdrop="false">
               <ng-template>
@@ -79,6 +81,9 @@
                   picker-format="YY MMM DD"
                   [(ngModel)]="startDateCtrl"
                   name="date-from"
+                  required
+                  [min]="selectedPlace.availableFrom.toISOString()"
+                  [max]="selectedPlace.availableTo.toISOString()"
                   (ionChange)="formatDate($event, 'startDateCtrl')"
                 >
                 </ion-datetime>
@@ -91,22 +96,24 @@
       <ion-row >
         <ion-col size-sm="6" offset-sm="3">
           <ion-item button="true" id="second-datepicker" detail="false">
-            <ion-input 
+            <ion-input
               [(ngModel)]="endDateCtrl"
               label="To"
               labelPlacement="floating"
               name="date-to"
               readonly
+              required
             ></ion-input>
             <ion-popover trigger="second-datepicker" class="popover-datetime" showBackdrop="false">
-  
               <ng-template>
                 <ion-datetime
                   display-format="MMM DD YYYY"
                   picker-format="YY MMM DD"
+                  required
                   [(ngModel)]="endDateCtrl"
                   name="date-to"
-                  [min]="startDateCtrl"
+                  [min]="startDateCtrl ? getMinDateForEndDateCtrl() : null"
+                  [max]="selectedPlace.availableTo.toISOString()"
                   (ionChange)="formatDate($event, 'endDateCtrl')"
                 >
                 </ion-datetime>
@@ -118,7 +125,7 @@
 
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">
-          <ion-button type="submit" color="primary" (click)="onBookPlace()" expand="block">Book!</ion-button>
+          <ion-button type="submit" color="primary" (click)="onBookPlace()" expand="block" [disabled]="!f.valid || !datesValid()">Book!</ion-button>
         </ion-col>
       </ion-row>
 

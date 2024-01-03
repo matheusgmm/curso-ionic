@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute} from '@angular/router';
 import { ActionSheetController, ModalController, NavController } from '@ionic/angular';
 import { PlacesService } from '../../places.service';
 import { Place } from '../../place.model';
 // import { CreateBookingComponent } from '../../../bookings/create-booking/create-booking.component';
 import { CreateBookingComponent } from '../../../bookings/create-booking/create-booking.component';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -12,9 +13,10 @@ import { CreateBookingComponent } from '../../../bookings/create-booking/create-
   templateUrl: './place-detail.page.html',
   styleUrls: ['./place-detail.page.scss'],
 })
-export class PlaceDetailPage implements OnInit {
+export class PlaceDetailPage implements OnInit, OnDestroy {
 
   place?: Place;
+  private placeSub!: Subscription;
 
   constructor(
     private navCtrl: NavController,
@@ -29,10 +31,17 @@ export class PlaceDetailPage implements OnInit {
       if (!paramMap.has('placeId')) {
         this.navCtrl.navigateBack('/places/tabs/discover');
         return;
-      } 
-      
-      this.place = this.placesService.getPlace(paramMap.get('placeId')!) as any;
-      
+      }
+
+      this.placeSub= this.placesService.getPlace(paramMap.get('placeId')!).subscribe({
+        next: (place: any) => {
+          this.place = place
+          console.log('Place: ', place)
+        },
+        error: (error) => {
+          console.error('Error: ', error);
+        }
+      })
     });
   }
 
@@ -67,7 +76,7 @@ export class PlaceDetailPage implements OnInit {
       actionSheetEl.present();
     })
 
-    
+
   }
 
   openBookingModal(mode: 'select' | 'random') {
@@ -75,7 +84,8 @@ export class PlaceDetailPage implements OnInit {
     this.modalCtrl.create({
       component: CreateBookingComponent,
       componentProps: {
-        selectedPlace: this.place
+        selectedPlace: this.place,
+        selectedMode: mode
       }
     })
     .then(modalEl => {
@@ -89,6 +99,12 @@ export class PlaceDetailPage implements OnInit {
         console.log("BOOKED!");
       }
     })
+  }
+
+  ngOnDestroy(): void {
+    if (this.placeSub) {
+      this.placeSub.unsubscribe();
+    }
   }
 
 }

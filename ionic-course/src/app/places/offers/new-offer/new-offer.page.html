@@ -19,25 +19,25 @@
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">
           <ion-item>
-            <ion-input 
+            <ion-input
                 type="text"
                 autocorrect
-                label="Title" 
-                labelPlacement="floating" 
+                label="Title"
+                labelPlacement="floating"
                 placeholder="Enter title"
                 formControlName="title"
               ></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
-  
+
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">
           <ion-item>
             <ion-textarea
               rows="3"
               label="Short Description"
-              labelPlacement="floating" 
+              labelPlacement="floating"
               formControlName="description"
             ></ion-textarea>
           </ion-item>
@@ -46,40 +46,40 @@
 
       <ion-row *ngIf="!form.get('description')?.valid && form.get('description')?.touched || form.get('description')?.touched && !form.get('description')?.value">
         <ion-col size-sm="6" offset-sm="3">
-          <ion-label 
-            class="ion-text-center ion-margin-start" 
+          <ion-label
+            class="ion-text-center ion-margin-start"
             color="danger"
           >
             Description must be between 1 and 180 characters.
           </ion-label>
         </ion-col>
       </ion-row>
-  
+
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">
           <ion-item>
-            <ion-input 
+            <ion-input
                 type="number"
-                label="Price" 
-                labelPlacement="floating" 
+                label="Price"
+                labelPlacement="floating"
                 placeholder="Enter price"
                 formControlName="price"
             ></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
-  
+
       <ion-row >
-  
+
         <ion-col size-sm="3" offset-sm="3">
           <ion-item button="true" id="first-datepicker" detail="false">
-            <ion-input 
+            <ion-input
               [value]="form.controls['dateFrom'].value | date:'dd/MM/yyyy'"
               label="From"
-              labelPlacement="floating" 
+              labelPlacement="floating"
             ></ion-input>
             <ion-popover trigger="first-datepicker" class="popover-datetime" showBackdrop="false">
-  
+
               <ng-template>
                 <ion-datetime
                   min="2023-01-01"
@@ -89,20 +89,20 @@
                   #dateFromPopover
                 ></ion-datetime>
               </ng-template>
-  
+
             </ion-popover>
           </ion-item>
         </ion-col>
-  
+
         <ion-col size-sm="3" >
           <ion-item button="true" id="second-datepicker" detail="false">
-            <ion-input 
+            <ion-input
               [value]="form.controls['dateTo'].value | date:'dd/MM/yyyy'"
               label="To"
-              labelPlacement="floating" 
+              labelPlacement="floating"
             ></ion-input>
             <ion-popover trigger="second-datepicker" class="popover-datetime" showBackdrop="false">
-  
+
               <ng-template>
                 <ion-datetime
                   min="2023-01-02"
@@ -111,18 +111,19 @@
                   #dateTopopover
                   formControlName="dateTo"
                 ></ion-datetime>
-  
+
               </ng-template>
             </ion-popover>
           </ion-item>
         </ion-col>
-  
+
       </ion-row>
 
     </ion-grid>
+
   </form>
 </ion-content>
-  
+
 
 
         <!-- <ion-row>
@@ -132,7 +133,7 @@
             <ion-datetime min="2023-01-01" max="2024-12-31"></ion-datetime>
           </ion-item>
         </ion-col>
-  
+
         <ion-col size-sm="3">
           <ion-item>
             <ion-label position="floating">Available to</ion-label>
@@ -140,7 +141,7 @@
           </ion-item>
         </ion-col>
       </ion-row> -->
- 
+
 <!-- <ion-content [fullscreen]="true">
   <ion-grid class="ion-no-padding" fixed>
     <ion-row class="ion-align-items-center ion-justify-content-center">
