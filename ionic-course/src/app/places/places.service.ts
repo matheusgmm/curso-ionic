@@ -27,7 +27,7 @@ export class PlacesService {
       189.99,
       new Date('2024-01-05'),
       new Date('2024-01-15'),
-      'abc'
+      'xyz'
     ),
     new Place(
       'p3',
@@ -37,7 +37,7 @@ export class PlacesService {
       99.99,
       new Date('2023-12-28'),
       new Date('2023-12-31'),
-      'abc'
+      'xyz'
     ),
   ]);
 
@@ -97,7 +97,7 @@ export class PlacesService {
           oldPlace.imageUrl,
           oldPlace.price,
           oldPlace.availableFrom,
-          oldPlace.availableTo, 
+          oldPlace.availableTo,
           oldPlace.userId
         );
         this._places.next(updatedPlaces);

@@ -15,12 +15,9 @@ export class CreateBookingComponent  implements OnInit {
   @Input() selectedPlace!: Place;
   @Input() selectedMode!:  'select' | 'random';
   @ViewChild('f', { static: true } ) form!: NgForm;
-  // @ViewChild('f', { static: true }) form: NgForm | undefined;
 
   endDateCtrl: any;
   startDateCtrl: any
-
-
 
   constructor(
     private modalCtrl: ModalController,
@@ -41,8 +38,6 @@ export class CreateBookingComponent  implements OnInit {
     // Gera uma data aleatória entre as datas de início e fim
     const randomTime = start.getTime() + Math.random() * (end.getTime() - start.getTime());
     const randomDate = new Date(randomTime);
-
-    // Retorna a data formatada no formato 'yyyy-MM-dd'
     return this.formatDateToISO(randomDate.toISOString());
   }
 
@@ -56,52 +51,50 @@ export class CreateBookingComponent  implements OnInit {
       return;
     }
 
-    this.modalCtrl.dismiss({ bookingData: {
+    const bookingData = {
       firstName: this.form.value['first-name'],
       lastName: this.form.value['last-name'],
-      guestNumber: this.form.value['guest-number'],
+      guestNumber: +this.form.value['guest-number'],
       startDate: this.form.value['date-from'],
       endDate: this.form.value['date-to']
-    }}, 'confirm');
+    };
+
+    this.modalCtrl.dismiss({ bookingData }, 'confirm');
   }
 
   formatDateToDisplay(date: string | null): string {
-    // Formata a data para exibição no formato 'yyyy-MM-dd'
     return date !== null ? this.datePipe.transform(date, 'yyyy-MM-dd') || '' : '';
   }
 
   formatDateToISO(date: string | null): string {
-    // Converte a data formatada para o formato 'yyyy-MM-dd'
     return date ? this.datePipe.transform(date, 'yyyy-MM-dd') || '' : '';
   }
 
   getMinDateForStartDateCtrl(): string | null {
-    // Retorna a data mínima para o startDateCtrl
     return this.startDateCtrl ? this.formatDateToISO(this.startDateCtrl) : null;
   }
 
   getMinDateForEndDateCtrl(): string | null {
-    // Retorna a data mínima para o endDateCtrl
     return this.startDateCtrl ? this.formatDateToISO(this.startDateCtrl) : null;
   }
 
   formatDate(event: CustomEvent, field: 'startDateCtrl' | 'endDateCtrl'): void {
     const selectedDate = event.detail.value;
-
-    // Formata a data para exibição
     const formattedDate = this.formatDateToDisplay(selectedDate);
-
-    // Converte a data formatada para o formato 'yyyy-MM-dd'
     const isoDate = this.formatDateToISO(selectedDate);
-
-    // Atribui a data no formato 'yyyy-MM-dd' à variável correspondente (startDate ou endDate)
     this[field] = isoDate;
+
+    this.form.controls[field === 'startDateCtrl' ? 'date-from' : 'date-to'].setValue(isoDate);
   }
 
   datesValid() {
     const startDate = new Date(this.form.value['date-from']);
     const endDate = new Date(this.form.value['date-to']);
-    return endDate > startDate
+    return endDate > startDate;
+  }
+
+  trackByFn(index: number, item: any): number {
+    return index;
   }
 
 }
