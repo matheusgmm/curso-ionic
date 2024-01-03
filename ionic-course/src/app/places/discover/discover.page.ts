@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PlacesService } from '../places.service';
 import { Place } from '../place.model';
 import { MenuController, SegmentChangeEventDetail } from '@ionic/angular';
-import { Subscription } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
@@ -13,8 +13,10 @@ import { AuthService } from 'src/app/auth/auth.service';
 export class DiscoverPage implements OnInit, OnDestroy {
   loadedPlaces: Place[] = [];
   listedLoadedPlaces: Place[] = [];
+  placesSub: Subscription = new Subscription();
   relevantPlaces: Place[] = [];
-  placesSub!: Subscription;
+  chosenFilter: string = '';
+
 
   constructor(
     private placesService: PlacesService,
@@ -23,12 +25,23 @@ export class DiscoverPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.placesService.places.subscribe((places) => {
+    this.chosenFilter = 'all';
+    this.setPlacesByFilter(this.chosenFilter);
+  }
+
+  setPlacesByFilter(chosenFilter: string) {
+    this.placesSub = this.placesService.places.subscribe((places) => {
       this.loadedPlaces = places;
-      this.relevantPlaces = this.loadedPlaces;
-      this.listedLoadedPlaces = this.relevantPlaces.slice(1);
+      if (chosenFilter === 'all') {
+        this.relevantPlaces = this.loadedPlaces;
+        this.listedLoadedPlaces = this.relevantPlaces.slice(1);
+      } else {
+        this.relevantPlaces = this.loadedPlaces.filter(
+          (place) => place.userId !== this.authService.userId
+        );
+        this.listedLoadedPlaces = this.relevantPlaces.slice(1);
+      }
     });
-    console.info('P: ', this.loadedPlaces);
   }
 
   onOpenMenu() {
@@ -37,16 +50,23 @@ export class DiscoverPage implements OnInit, OnDestroy {
 
   onFilterUpdate(event: CustomEvent<SegmentChangeEventDetail>) {
     console.log(event.detail);
-    if (event.detail.value === 'all') {
-      this.relevantPlaces = this.loadedPlaces;
-      this.listedLoadedPlaces = this.relevantPlaces.slice(1);
-    } else {
-      this.relevantPlaces = this.loadedPlaces.filter(
-        place => place.userId !== this.authService.userId
-      );
-      this.listedLoadedPlaces = this.relevantPlaces.slice(1);
-    }
+    this.chosenFilter = String(event.detail.value);
+    this.setPlacesByFilter(this.chosenFilter);
   }
+
+
+  // onFilterUpdate(event: CustomEvent<SegmentChangeEventDetail>) {
+  //   console.log(event.detail);
+  //   if (event.detail.value === 'all') {
+  //     this.relevantPlaces = this.loadedPlaces;
+  //     this.listedLoadedPlaces = this.relevantPlaces.slice(1);
+  //   } else {
+  //     this.relevantPlaces = this.loadedPlaces.filter(
+  //       place => place.userId !== this.authService.userId
+  //     );
+  //     this.listedLoadedPlaces = this.relevantPlaces.slice(1);
+  //   }
+  // }
 
   ngOnDestroy(): void {
     if (this.placesSub) {
