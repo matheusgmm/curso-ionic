@@ -2,10 +2,10 @@
   <ion-toolbar>
     <ion-title>Edit Offer</ion-title>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="{{'/places/tabs/offers/' + place?.id}}"></ion-back-button>
+      <ion-back-button defaultHref="{{'/places/tabs/offers/' + placeId}}"></ion-back-button>
     </ion-buttons>
     <ion-buttons buttons slot="primary">
-      <ion-button (click)="onUpdateOffer()" [disabled]="!form.valid">
+      <ion-button (click)="onUpdateOffer()" [disabled]="form ? !form.valid : form">
         <ion-icon name="checkmark" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -13,30 +13,34 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <form [formGroup]="form">
+  <div class="ion-text-center ion-margin-top" *ngIf="isLoading">
+    <ion-spinner color="primary"></ion-spinner>
+  </div>
+
+  <form [formGroup]="form" *ngIf="!isLoading">
     <ion-grid>
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">
           <ion-item>
-            <ion-input 
+            <ion-input
                 type="text"
                 autocorrect
-                label="Title" 
-                labelPlacement="floating" 
+                label="Title"
+                labelPlacement="floating"
                 placeholder="Enter title"
                 formControlName="title"
               ></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
-  
+
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">
           <ion-item>
             <ion-textarea
               rows="3"
               label="Short Description"
-              labelPlacement="floating" 
+              labelPlacement="floating"
               formControlName="description"
             ></ion-textarea>
           </ion-item>
@@ -45,8 +49,8 @@
 
       <ion-row *ngIf="!form.get('description')?.valid && form.get('description')?.touched || form.get('description')?.touched && !form.get('description')?.value">
         <ion-col size-sm="6" offset-sm="3">
-          <ion-label 
-            class="ion-text-center ion-margin-start" 
+          <ion-label
+            class="ion-text-center ion-margin-start"
             color="danger"
           >
             Description must be between 1 and 180 characters.

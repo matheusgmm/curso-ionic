@@ -13,8 +13,10 @@ import { AuthService } from 'src/app/auth/auth.service';
 export class DiscoverPage implements OnInit, OnDestroy {
   loadedPlaces: Place[] = [];
   listedLoadedPlaces: Place[] = [];
-  placesSub: Subscription = new Subscription();
   relevantPlaces: Place[] = [];
+  private placesSub: Subscription = new Subscription();
+  isLoading: boolean = false;
+
   chosenFilter: string = '';
 
 
@@ -25,9 +27,24 @@ export class DiscoverPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.placesSub = this.placesService.places.subscribe(places => {
+      this.loadedPlaces = places;
+      this.relevantPlaces = this.loadedPlaces;
+      this.listedLoadedPlaces = this.relevantPlaces.slice(1);
+    })
+
     this.chosenFilter = 'all';
     this.setPlacesByFilter(this.chosenFilter);
   }
+
+  ionViewWillEnter(){
+    this.isLoading = true;
+    this.placesService.fetchPlaces().subscribe(() => {
+      this.isLoading = false;
+    });
+  }
+
+
 
   setPlacesByFilter(chosenFilter: string) {
     this.placesSub = this.placesService.places.subscribe((places) => {
