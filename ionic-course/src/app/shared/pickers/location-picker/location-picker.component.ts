@@ -1,23 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { MapModalComponent } from '../../map-modal/map-modal.component';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { map } from 'rxjs';
+import { map, of, switchMap } from 'rxjs';
+import { PlaceLocation } from 'src/app/places/location.model';
+
 
 @Component({
   selector: 'app-location-picker',
   templateUrl: './location-picker.component.html',
   styleUrls: ['./location-picker.component.scss'],
 })
-export class LocationPickerComponent  implements OnInit {
+export class LocationPickerComponent implements OnInit {
+  @Output() locationPick = new EventEmitter<PlaceLocation>();
+  selectedLocationImage!: string;
+  isLoading: boolean = false;
 
   constructor(
     private modalCtrl: ModalController,
     private http: HttpClient
   ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
 
   onPickLocation() {
@@ -30,11 +35,27 @@ export class LocationPickerComponent  implements OnInit {
           if (!modalData.data) {
             return;
           }
-          this.getAddress(modalData.data.lat, modalData.data.lng).subscribe(
-            (address) => {
-              console.log('Address: ', address)
-            });
-        })
+          const pickedLocation: PlaceLocation = {
+            lat: modalData.data.lat,
+            lng: modalData.data.lng,
+            address: 'null',
+            staticMapImageUrl: 'null'
+          }
+          this.isLoading = true;
+          this.getAddress(modalData.data.lat, modalData.data.lng).pipe(
+            switchMap(address => {
+              pickedLocation.address = address;
+              return of(
+                this.getMapImage(pickedLocation.lat, pickedLocation.lng, 14)
+              );
+            })
+          ).subscribe(staticMapImageUrl => {
+            pickedLocation.staticMapImageUrl = staticMapImageUrl;
+            this.selectedLocationImage = staticMapImageUrl;
+            this.isLoading = false;
+            this.locationPick.emit(pickedLocation);
+          })
+        });
         modalEl.present();
       });
   }
@@ -52,4 +73,11 @@ export class LocationPickerComponent  implements OnInit {
     )
   }
 
+  private getMapImage(lat: number, lng: number, zoom: number) {
+    return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=600x300&maptype=roadmap
+    &markers=color:red%7Clabel:Place%7C${lat},${lng}
+    &key=${environment.googleMapsAPIKey}`;
+  }
+
 }
+

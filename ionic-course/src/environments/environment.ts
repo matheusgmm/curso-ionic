@@ -2,9 +2,11 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import { googleMapsAPIKey } from "src/app/config";
+
 export const environment = {
   production: false,
-  googleMapsAPIKey: 'AIzaSyAhdsrB4QNF1Rc-Lg-ox3Qx7-91DKPPS5Q'
+  googleMapsAPIKey: googleMapsAPIKey.APIKey
 };
 
 /*
