@@ -94,7 +94,7 @@
           </ion-item>
         </ion-col>
 
-        <ion-col size-sm="3" >
+        <ion-col size-sm="3">
           <ion-item button="true" id="second-datepicker" detail="false">
             <ion-input
               [value]="form.controls['dateTo'].value | date:'dd/MM/yyyy'"
@@ -116,11 +116,15 @@
             </ion-popover>
           </ion-item>
         </ion-col>
+      </ion-row>
 
+      <ion-row>
+        <ion-col size-sm="3" offset-sm="3">
+          <app-location-picker></app-location-picker>
+        </ion-col>
       </ion-row>
 
     </ion-grid>
-
   </form>
 </ion-content>
 
