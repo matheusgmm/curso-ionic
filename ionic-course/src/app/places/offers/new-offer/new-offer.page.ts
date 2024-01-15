@@ -18,7 +18,7 @@ export class NewOfferPage implements OnInit {
     private placesService: PlacesService,
     private router: Router,
     private loadingCtrl: LoadingController
-    ) {}
+  ) { }
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -42,14 +42,14 @@ export class NewOfferPage implements OnInit {
         updateOn: 'blur',
         validators: [Validators.required],
       }),
-      location: new FormControl(null, { 
+      location: new FormControl(null, {
         validators: [Validators.required]
       })
     });
   }
 
-  onLocationPicked(location: PlaceLocation){
-    this.form.patchValue({location: location});
+  onLocationPicked(location: PlaceLocation) {
+    this.form.patchValue({ location: location });
   }
 
   onCreateOffer() {
