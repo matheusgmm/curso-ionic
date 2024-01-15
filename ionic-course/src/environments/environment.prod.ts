@@ -1,3 +1,6 @@
+import { googleMapsAPIKey } from "src/app/config";
+
 export const environment = {
-  production: true
+  production: true,
+  googleMapsAPIKey: googleMapsAPIKey.APIKey
 };
