@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 import { map, of, switchMap } from 'rxjs';
 import { Coordinates, PlaceLocation } from 'src/app/places/location.model';
 
-import { Plugins, Capacitor } from '@capacitor/core';
+import { Capacitor } from '@capacitor/core';
 import { Geolocation } from '@capacitor/geolocation';
 
 @Component({
@@ -32,6 +32,7 @@ export class LocationPickerComponent implements OnInit {
   onPickLocation() {
     this.actionSheetCtrl.create({
       header: 'Please Choose',
+      mode: 'ios',
       buttons: [
         {
           text: 'Auto-Locate',
@@ -100,7 +101,8 @@ export class LocationPickerComponent implements OnInit {
   private showErrorAlert() {
     this.alertCtrl.create({
       header: 'Could not fetch location',
-      message: 'Please use the map to pick a location!'
+      message: 'Please use the map to pick a location!',
+      buttons: ['Okay']
     }).then(alertEl => alertEl.present());
   }
 
